@@ -1,25 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 
 export const useCanvas = () => {
-  const [ctx, setCtx] = useState() as any;
+  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
-  const ref = useRef(null) as any;
-  const contextRef = useRef(null) as any;
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
 
   useEffect(() => {
     const canvas = ref.current;
     if (canvas) {
       const context = canvas.getContext("2d");
-
-      context.lineWidth = 2.5;
-      context.strokeStyle = "black";
-      contextRef.current = context;
-      setCtx(context);
+      if (context) {
+        context.lineWidth = 2.5;
+        context.strokeStyle = "white";
+        contextRef.current = context;
+        setCtx(context);
+      }
     }
   }, []);
 
-  const draw = (e: any) => {
+  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const { offsetX, offsetY } = e.nativeEvent;
 
     if (ctx) {
