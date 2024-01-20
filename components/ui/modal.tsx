@@ -1,19 +1,10 @@
-import React, { FC, forwardRef, useEffect, useRef, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
 
 interface ModalProps {
   open: boolean;
-  setOpen: (prev: any) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   children: React.ReactNode;
   title: string;
   createBtn?: () => void;
@@ -29,20 +20,30 @@ export const Modal: FC<ModalProps> = ({
   return (
     <div
       className={cn(
-        "w-screen h-screen flex items-center justify-center fixed top-0 left-0 bg-black/80",
+        "w-screen h-screen flex items-center justify-center fixed top-0 left-0 bg-black/60",
         !open && "hidden"
       )}
     >
-      <div className="w-[1200px] h-[700px] border-2 bg-[white] rounded-lg">
-        <div className="border-b-2">
-          <h3 className="p-[24px] font-bold text-[22px]">{title}</h3>
+      <div className="w-[380px] bg-[#1e1e1e] rounded-lg md:w-[800px] ">
+        <div className="">
+          <h3 className="p-[24px] font-bold text-[22px] text-[#eeeeee]">
+            {title}
+          </h3>
         </div>
-        <div className="border-2 border-black h-[600px] flex flex-col justify-between">
-          {children}
-          <div className="flex justify-end">
-            <Button onClick={setOpen}>취소</Button>
-            <Button onClick={createBtn}>생성</Button>
-          </div>
+        <div className=" border-y-2 border-y-[#272727]">{children}</div>
+        <div className="flex justify-end  mr-[24px] py-[12px] space-x-5">
+          <Button
+            size="lg"
+            variant="destructive"
+            onClick={() => setOpen((prev) => !prev)}
+          >
+            취소
+          </Button>
+          {createBtn && (
+            <Button size="lg" onClick={createBtn}>
+              생성
+            </Button>
+          )}
         </div>
       </div>
     </div>

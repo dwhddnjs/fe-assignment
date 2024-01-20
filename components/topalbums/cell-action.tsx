@@ -1,17 +1,20 @@
-import { use, useEffect, useRef, useState } from "react";
-import { Button } from "../ui/button";
-import { Modal } from "../ui/modal";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Modal } from "@/components/ui/modal";
 import { useCanvas } from "@/hooks/useCanvas";
-import { useTopalbums } from "@/hooks/useTopalbums";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { useToast } from "../ui/use-toast";
 
-export const CellAction = ({ rowId }: any) => {
+export const CellAction = () => {
   const [open, setOpen] = useState(false);
-  const [isDisplay, setIsDisplay] = useState(false);
+  const [mergedImage, setMergedImage] = useState("");
 
-  const mergedCanvasRef = useRef(null) as any;
+  const mergedCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const { ref, startDraw, endDraw, draw } = useCanvas();
+  const { toast } = useToast();
 
   const {
     ref: ref2,
@@ -20,92 +23,99 @@ export const CellAction = ({ rowId }: any) => {
     draw: draw2,
   } = useCanvas();
 
-  const { mutate } = useTopalbums();
-
   const getMergedCanvas = () => {
     const canvas = ref.current;
-    const canvasB = ref2.current;
-    const mergedCanvas = mergedCanvasRef?.current;
+    const canvas2 = ref2.current;
+    const mergedCanvas = mergedCanvasRef.current;
 
-    const context1 = canvas.getContext("2d");
-    const context2 = canvasB.getContext("2d");
-    const mergedContext = mergedCanvas?.getContext("2d");
+    if (canvas && canvas2 && mergedCanvas) {
+      const context1 = canvas.getContext("2d");
+      const context2 = canvas2.getContext("2d");
+      const mergedContext = mergedCanvas?.getContext("2d");
 
-    const imageData1 = context1.getImageData(0, 0, canvas.width, canvas.height);
-    const imageData2 = context2.getImageData(
-      0,
-      0,
-      canvasB.width,
-      canvasB.height
-    );
+      if (context1 && context2) {
+        const imageData1 = context1.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+        const imageData2 = context2.getImageData(
+          0,
+          0,
+          canvas2.width,
+          canvas2.height
+        );
 
-    for (let i = 0; i < imageData1.data.length; i++) {
-      const value1 = imageData1.data[i];
-      const value2 = imageData2.data[i];
+        for (let i = 0; i < imageData1.data.length; i++) {
+          const value1 = imageData1.data[i];
+          const value2 = imageData2.data[i];
 
-      if (imageData1.data[i] === imageData2.data[i]) {
-        imageData1.data[i] = Math.min(value1 + value2, 10);
-      } else {
-        imageData1.data[i] = Math.min(value1 + value2, 255);
+          if (imageData1.data[i] === imageData2.data[i]) {
+            imageData1.data[i] = Math.min(value1 + value2, 0);
+          } else {
+            imageData1.data[i] = Math.min(value1 + value2, 255);
+          }
+        }
+
+        mergedCanvas.width = canvas.width;
+        mergedCanvas.height = canvas.height;
+        mergedContext?.putImageData(imageData1, 0, 0);
+
+        const mergedImage = mergedCanvas.toDataURL();
+        setMergedImage(mergedImage);
+        toast({
+          title: "앨범표지가 생성되었습니다.",
+        });
+        setOpen(false);
       }
-
-      // if (i % 4 === 3) {
-      //   if (value1 === value2) {
-      //     imageData1.data[i] = Math.min(value1 + value2, 90);
-      //   } else {
-      //     imageData1.data[i] = Math.min(value1 + value2, 255);
-      //   }
-      // } else {
-      //   imageData1.data[i] = value1 + value2;
-      // }
     }
-
-    mergedCanvas.width = canvas.width;
-    mergedCanvas.height = canvas.height;
-
-    mergedContext.putImageData(imageData1, 0, 0);
-
-    setOpen(false);
-    setIsDisplay(true);
   };
 
   return (
     <div>
       <canvas
         ref={mergedCanvasRef}
-        width={200}
-        height={200}
-        className={cn("border-2 block", !isDisplay && "hidden")}
+        width={100}
+        height={100}
+        className="hidden"
       />
-      <Button
-        className={cn("border-2 block", isDisplay && "hidden")}
-        onClick={() => setOpen(true)}
-      >
-        오픈
-      </Button>
+      {mergedImage !== "" ? (
+        <Image
+          width={100}
+          height={100}
+          src={mergedImage}
+          alt=""
+          className="bg-[#1a1a1a]"
+        />
+      ) : (
+        <Button size="sm" onClick={() => setOpen(true)}>
+          앨범 생성
+        </Button>
+      )}
       <Modal
         open={open}
-        setOpen={(prev) => setOpen(!prev)}
+        setOpen={setOpen}
         title="앨범 생성"
         createBtn={() => getMergedCanvas()}
       >
-        <div className="flex">
+        <div className="flex flex-col justify-center items-center py-[8px] h-full  md:flex-row">
           <canvas
-            width={200}
-            height={200}
+            width={310}
+            height={310}
             onMouseDown={startDraw}
             onMouseMove={draw}
             onMouseUp={endDraw}
-            className="border-2 border-red "
+            className="border-2 border-[#272727] bg-[#1a1a1a] m-[8px] md:m-[26px]"
             ref={ref}
           />
           <canvas
-            width={200}
-            height={200}
+            width={310}
+            height={310}
             onMouseDown={startDraw2}
             onMouseMove={draw2}
             onMouseUp={endDraw2}
-            className="border-2 border-red "
+            className="border-2 border-[#272727] bg-[#1a1a1a] m-[8px] md:m-[26px]"
             ref={ref2}
           />
         </div>
