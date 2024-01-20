@@ -1,17 +1,19 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "../ui/button";
 import { CellAction } from "./cell-action";
+import { TopalbumTypes } from "@/hooks/useTopalbums";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<TopalbumTypes>[] = [
+  {
+    accessorKey: "id",
+    header: "id",
+  },
   {
     accessorKey: "title",
     header: "제목",
   },
+
   {
     accessorKey: "artist",
     header: "가수",
@@ -26,7 +28,7 @@ export const columns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "cover",
-    header: "앨범 표지 생성",
-    cell: ({ row }) => <CellAction rowId={row.original.id} />,
+    header: "앨범 표지",
+    cell: ({ row }) => <CellAction />,
   },
 ];
