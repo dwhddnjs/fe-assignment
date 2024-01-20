@@ -101,8 +101,8 @@ export const CellAction = () => {
       >
         <div className="flex flex-col justify-center items-center py-[8px] h-full  md:flex-row">
           <canvas
-            width={310}
-            height={310}
+            width={300}
+            height={300}
             onMouseDown={startDraw}
             onMouseMove={draw}
             onMouseUp={endDraw}
@@ -110,8 +110,8 @@ export const CellAction = () => {
             ref={ref}
           />
           <canvas
-            width={310}
-            height={310}
+            width={300}
+            height={300}
             onMouseDown={startDraw2}
             onMouseMove={draw2}
             onMouseUp={endDraw2}
