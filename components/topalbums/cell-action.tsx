@@ -82,11 +82,11 @@ export const CellAction = () => {
       />
       {mergedImage !== "" ? (
         <Image
-          width={100}
-          height={100}
+          width={150}
+          height={150}
           src={mergedImage}
           alt=""
-          className="bg-[#1a1a1a]"
+          className="bg-[#1e1e1e]"
         />
       ) : (
         <Button size="sm" onClick={() => setOpen(true)}>

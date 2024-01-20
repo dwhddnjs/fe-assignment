@@ -12,7 +12,7 @@ export const useCanvas = () => {
     if (canvas) {
       const context = canvas.getContext("2d");
       if (context) {
-        context.lineWidth = 2.5;
+        context.lineWidth = 12;
         context.strokeStyle = "white";
         contextRef.current = context;
         setCtx(context);
