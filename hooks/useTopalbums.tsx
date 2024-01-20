@@ -1,6 +1,29 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+export type KeyStringTypes = {
+  [key: string]: string;
+};
+
+export type AttributesTypes = {
+  [key: string]: KeyStringTypes;
+};
+
+export type ResponseDataTypes = {
+  category: AttributesTypes;
+  id: AttributesTypes & KeyStringTypes;
+  "im:artist": AttributesTypes & KeyStringTypes;
+  "im:contentType": AttributesTypes;
+  "im:image": Array<AttributesTypes & KeyStringTypes>;
+  "im:itemCount": KeyStringTypes;
+  "im:name": KeyStringTypes;
+  "im:price": AttributesTypes & KeyStringTypes;
+  "im:releaseDate": AttributesTypes & KeyStringTypes;
+  link: AttributesTypes;
+  rights: KeyStringTypes;
+  title: KeyStringTypes;
+};
+
 export type TopalbumTypes = {
   id: string;
   title: string;
@@ -22,7 +45,7 @@ export const useTopalbums = (limit: number) => {
         );
         if (res) {
           const result = await res.data.feed.entry;
-          const sortData = result.map((data: any) => ({
+          const sortData = result.map((data: ResponseDataTypes) => ({
             id: data.id.attributes["im:id"],
             title: data["im:name"].label,
             artist: data["im:artist"].label,
