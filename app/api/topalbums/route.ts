@@ -1,8 +1,11 @@
 import axios from "axios";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET(req: Request) {
-  const response = await axios.get(process.env.NEXT_PUBLIC_API_URL as string);
+export async function GET(req: NextRequest) {
+  const params = req.nextUrl.searchParams.get("limit");
+  const response = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/limit=${params}/json` as string
+  );
 
   const data = response.data;
 

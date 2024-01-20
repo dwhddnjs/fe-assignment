@@ -1,9 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export const useTopalbums = () => {
-  const [data, setData] = useState<any>(null);
-  console.log("data: ", data);
+export type TopalbumTypes = {
+  id: string;
+  title: string;
+  artist: string;
+  category: string;
+  price: string;
+};
+
+export const useTopalbums = (limit: number) => {
+  const [data, setData] = useState<TopalbumTypes[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -11,17 +18,16 @@ export const useTopalbums = () => {
     (async () => {
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/topalbums`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/topalbums?limit=${limit}`
         );
         if (res) {
           const result = await res.data.feed.entry;
-          const sortData = result.map((data: any, i: number) => ({
-            id: i + 1,
+          const sortData = result.map((data: any) => ({
+            id: data.id.attributes["im:id"],
             title: data["im:name"].label,
             artist: data["im:artist"].label,
             category: data.category.attributes.term,
             price: data["im:price"].label,
-            cover: null,
           }));
           setData(sortData);
         }
@@ -31,21 +37,7 @@ export const useTopalbums = () => {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [limit]);
 
-  const mutate = ({ id, ctx }: any) => {
-    const prevState = [...data];
-    const findIndex = prevState.find((el) => el.id === id);
-
-    console.log("ctx: ", ctx);
-
-    prevState[id - 1] = {
-      ...findIndex,
-      cover: ctx,
-    };
-
-    setData(prevState);
-  };
-
-  return { data, isLoading, error, mutate };
+  return { data, isLoading, error };
 };
