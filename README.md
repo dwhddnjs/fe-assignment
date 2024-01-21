@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+##프론트엔드 이종원 사전과제
 
-## Getting Started
+- 이름: 이종원
+- 기술스택: NEXT.js, tailwind, typescript
 
-First, run the development server:
+###프로젝트 구동방법
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. node version = 18.17.0 권장
+   - $nvm install 18.17.0
+   - $nvm use 18.17.0
+2. 패키지 설치
+   - $npm install
+3. .env 파일 생성
+   ```
+   NEXT_PUBLIC_API_URL=https://itunes.apple.com/us/rss/topalbums
+   NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+   ```
+4. 프로젝트 실행
+   - $npm run dev or $yarn dev
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+###구현
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. 기본
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   - page 마크업 및 UI 스타일링
+   - 반응형 UI 구현
 
-## Learn More
+1. Data Table
 
-To learn more about Next.js, take a look at the following resources:
+   - API 데이터 패칭 및 가공 후 table 컴포넌트 생성 후 렌더
+   - 데이터 재사용을 위해 커스텀훅 작성
+   - 하단 아이콘 버튼 클릭시 데이터 갯수 추가(10개)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. 앨범 표지 생성 기능
+   - 앨범 생성 공용 Modal 컴포넌트 생성
+   - 각 canvas 그림 그리기 기능 추가 커스텀 훅 작성
+   - 생성 버튼 클릭시 A canvas 그림과 B canvas 그림 겹쳐진 후 교차점에 점 찍힌 그림 생성 handler 추가
+   - 각 Item별 생성된 앨범표지 그림 렌더
