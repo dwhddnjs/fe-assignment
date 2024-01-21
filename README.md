@@ -1,9 +1,9 @@
-##프론트엔드 이종원 사전과제
+## 프론트엔드 이종원 사전과제
 
 - 이름: 이종원
 - 기술스택: NEXT.js, tailwind, typescript
 
-###프로젝트 구동방법
+### 프로젝트 구동방법
 
 1. node version = 18.17.0 권장
    - $nvm install 18.17.0
@@ -18,7 +18,7 @@
 4. 프로젝트 실행
    - $npm run dev or $yarn dev
 
-###구현
+### 구현
 
 1. 기본
 
