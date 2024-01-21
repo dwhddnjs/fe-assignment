@@ -9,7 +9,7 @@
    - $nvm install 18.17.0
    - $nvm use 18.17.0
 2. 패키지 설치
-   - $npm install
+   - $npm install or $yarn install
 3. .env 파일 생성
    ```
    NEXT_PUBLIC_API_URL=https://itunes.apple.com/us/rss/topalbums
