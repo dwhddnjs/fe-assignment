@@ -1,4 +1,4 @@
-import axios from "axios";
+import { fetcher } from "@/lib/axios";
 import { useEffect, useState } from "react";
 
 export type KeyStringTypes = {
@@ -40,9 +40,7 @@ export const useTopalbums = (limit: number) => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/topalbums?limit=${limit}`
-        );
+        const res = await fetcher.get(`/api/topalbums?limit=${limit}`);
         if (res) {
           const result = await res.data.feed.entry;
           const sortData = result.map((data: ResponseDataTypes) => ({
